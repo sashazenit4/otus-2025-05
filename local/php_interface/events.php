@@ -15,8 +15,3 @@ $eventManager->addEventHandler('', 'ColorsOnBeforeDelete', [
     '\Otus\Hlblock\Handlers\Element',
     'onBeforeDeleteHandler',
 ]);
-
-$eventManager->addEventHandler('main', 'OnBeforeProlog', [
-    '\Otus\Main\Handlers',
-    'onBeforePrologHandler',
-]);
