@@ -1,5 +1,7 @@
 {
     "require": {
-        "symfony/var-dumper": "^7.3"
+        "symfony/var-dumper": "^7.3",
+        "phpoffice/phpspreadsheet": "^4.1",
+        "mpdf/mpdf": "^8.2"
     }
 }
