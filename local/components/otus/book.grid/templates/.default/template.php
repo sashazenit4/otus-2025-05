@@ -19,6 +19,7 @@ Loader::includeModule('ui');
 foreach ($arResult['BUTTONS'] as $button) {
     Toolbar::addButton($button);
 }
+
 Toolbar::addFilter([
     'FILTER_ID' => $arResult['FILTER_ID'],
     'GRID_ID' => $arResult['FILTER_ID'],
@@ -91,3 +92,8 @@ if (!empty($arParams['AJAX_LOADER'])) { ?>
         });
     </script>
 <?php } ?>
+<script>
+    BX.Otus.BookGrid.init(<?=Json::encode([
+        'signedParams' => $this->__component->getSignedParameters(),
+    ])?>);
+</script>
