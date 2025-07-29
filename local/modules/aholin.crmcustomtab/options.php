@@ -20,11 +20,12 @@ Loader::includeModule('main');
 $module_id = htmlspecialcharsbx('' != $request['mid'] ? $request['mid'] : $request['id']);
 
 Loader::includeModule($module_id);
+Loader::includeModule('crm');
 $aTabsStatic = [
     [
-        'DIV' => 'crm',
+        'DIV' => 'empty',
         'TAB' => Loc::getMessage('EMPTY_CONFIG_TITLE'),
-        'ICON' => 'dis_settings',
+        'ICON' => '',
         'TITLE' => Loc::getMessage('EMPTY_CONFIG_TITLE'),
         'OPTIONS' => [
             [
@@ -34,6 +35,37 @@ $aTabsStatic = [
                 [
                     'text',
                     50,
+                ],
+            ],
+            [
+                'DADATA_TOKEN',
+                Loc::getMessage('DADATA_TOKEN_TITLE'),
+                '',
+                [
+                    'text',
+                    50,
+                ],
+            ],
+        ]
+    ],
+    [
+        'DIV' => 'crm',
+        'TAB' => Loc::getMessage('CRM_CONFIG_TITLE'),
+        'ICON' => '',
+        'TITLE' => Loc::getMessage('CRM_CONFIG_TITLE'),
+        'OPTIONS' => [
+            [
+                'ENTITIES_TO_DISPLAY_TAB',
+                Loc::getMessage('ENTITIES_TO_DISPLAY_TAB_TITLE'),
+                '',
+                [
+                    'multiselectbox',
+                    [
+                        \CCrmOwnerType::Deal => 'Сделка',
+                        \CCrmOwnerType::Contact => 'Контакт',
+                        \CCrmOwnerType::Company => 'Компания',
+                        \CCrmOwnerType::Lead => 'Лид',
+                    ],
                 ],
             ],
         ]
