@@ -5,32 +5,13 @@ use Bitrix\Main\Localization\Loc;
 use Bitrix\Main\UI\PageNavigation;
 use Bitrix\Main\Grid\Options as GridOptions;
 use Bitrix\Main\UI\Filter\Options as FilterOptions;
-use Otus\Orm\BookTable;
-use Otus\Orm\AuthorTable;
+use Aholin\Crmcustomtab\Orm\BookTable;
+use Bitrix\Main\Loader;
 use Bitrix\Main\ORM\Query\Result;
-use Bitrix\UI\Buttons\Color;
-use Bitrix\Main\Error;
-use Bitrix\Main\Type\DateTime;
-use Bitrix\Main\Errorable;
-use Bitrix\Main\ErrorableImplementation;
 
-class BookGrid extends \CBitrixComponent implements Controllerable, Errorable
+Loader::includeModule('aholin.crmcustomtab');
+class BookGrid extends \CBitrixComponent implements Controllerable
 {
-    use ErrorableImplementation;
-
-    public function onPrepareComponentParams($arParams): array
-    {
-        $arParams['BOOK_PREFIX'] = strtolower($arParams['BOOK_PREFIX']);
-        return $arParams;
-    }
-
-    public function listKeysSignedParameters(): array
-    {
-        return [
-            'BOOK_PREFIX',
-        ];
-    }
-
     public function configureActions(): array
     {
         return [];
@@ -39,49 +20,6 @@ class BookGrid extends \CBitrixComponent implements Controllerable, Errorable
     private function getElementActions(): array
     {
         return [];
-    }
-
-    /**
-     * @throws \Bitrix\Main\ObjectPropertyException
-     * @throws \Bitrix\Main\ArgumentException
-     * @throws \Bitrix\Main\SystemException
-     */
-    public function addTestBookElementAction(array $bookData): array
-    {
-        $newBookData = [
-            'TITLE' => $this->arParams['BOOK_PREFIX'] . $bookData['bookTitle'] ?? '',
-            'YEAR' => $bookData['publishYear'] ?? 2000,
-            'PAGES' => $bookData['pageCount'] ?? 0,
-            'PUBLISH_DATE' => DateTime::createFromText($bookData['publishDate'] ?? ''),
-        ];
-
-        $addResult = BookTable::add($newBookData);
-        if (!$addResult->isSuccess()) {
-            $this->errorCollection->add([new Error('Не удалось создать книгу')]);
-            return [];
-        }
-
-        $bookId = $addResult->getId();
-        $book = BookTable::getByPrimary($bookId)->fetchObject();
-
-        $authorIds = $bookData['authors'];
-        foreach ($authorIds as $authorId) {
-            $author = AuthorTable::getByPrimary($authorId)->fetchObject();
-            if ($author) {
-                $book->addToAuthors($author);
-            }
-        }
-
-        $updateResult = $book->save();
-
-        if (!$updateResult->isSuccess()) {
-            $this->errorCollection->add([new Error('Не удалось добавить авторов')]);
-            return [];
-        }
-
-        return [
-            'BOOK_ID' => $bookId
-        ];
     }
 
     private function getHeaders(): array
@@ -125,39 +63,8 @@ class BookGrid extends \CBitrixComponent implements Controllerable, Errorable
         ];
     }
 
-    protected function getButtons(): array
-    {
-        return [
-            [
-                'link' => '?EXPORT_MODE=Y',
-                'text' => Loc::getMessage('EXPORT_XLSX_BUTTON_TITLE'),
-                'color' => Color::PRIMARY,
-            ],
-            [
-                'onclick' => 'BX.Otus.BookGrid.addTestBookElement',
-                'text' => Loc::getMessage('ADD_TEST_BOOK_BUTTON_TITLE'),
-                'color' => Color::SUCCESS,
-            ],
-            [
-                'onclick' => 'BX.Otus.BookGrid.createAlternativeTestBookElement',
-                'text' => Loc::getMessage('ADD_TEST_BOOK_BUTTON_TITLE') . ' - альтернативное применение',
-                'color' => Color::DANGER_LIGHT,
-            ],
-            [
-                'onclick' => 'BX.Otus.BookGrid.createTestElementViaModule',
-                'text' => Loc::getMessage('ADD_TEST_BOOK_BUTTON_TITLE') . ' - через модуль',
-                'color' => Color::PRIMARY_DARK,
-            ],
-        ];
-    }
-
     public function executeComponent(): void
     {
-        if ($this->request->get('EXPORT_MODE') == 'Y') {
-            $this->setTemplateName('excel');
-        }
-
-        $this->arResult['BUTTONS'] = $this->getButtons();
         $this->prepareGridData();
         $this->includeComponentTemplate();
     }
@@ -168,7 +75,6 @@ class BookGrid extends \CBitrixComponent implements Controllerable, Errorable
         $this->arResult['FILTER_ID'] = 'BOOK_GRID';
 
         $gridOptions = new GridOptions($this->arResult['FILTER_ID']);
-        $this->arResult['USED_HEADERS'] = $gridOptions->getUsedColumns($this->arResult['HEADERS']);
         $navParams = $gridOptions->getNavParams();
 
         $nav = new PageNavigation($this->arResult['FILTER_ID']);

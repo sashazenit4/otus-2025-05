@@ -1,9 +1,6 @@
 <?php
 
 use Bitrix\Main\Web\Json;
-use Bitrix\Main\Localization\Loc;
-use Bitrix\UI\Toolbar\Facade\Toolbar;
-use Bitrix\Main\Loader;
 
 if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true)
     die();
@@ -15,20 +12,22 @@ if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true)
  * @global $component
  */
 
-Loader::includeModule('ui');
-foreach ($arResult['BUTTONS'] as $button) {
-    Toolbar::addButton($button);
-}
+\Bitrix\Main\Loader::includeModule('ui');
+$APPLICATION->IncludeComponent(
+    'bitrix:main.ui.filter',
+    '',
+    [
+        'FILTER_ID' => $arResult['FILTER_ID'],
+        'GRID_ID' => $arResult['FILTER_ID'],
+        'ENABLE_FIELDS_SEARCH' => false,
+        'FILTER' => $arResult['UI_FILTER'],
+        'ENABLE_LIVE_SEARCH' => true,
+        'ENABLE_LABEL' => true
+    ]);
 
-Toolbar::addFilter([
-    'FILTER_ID' => $arResult['FILTER_ID'],
-    'GRID_ID' => $arResult['FILTER_ID'],
-    'ENABLE_FIELDS_SEARCH' => false,
-    'FILTER' => $arResult['UI_FILTER'],
-    'ENABLE_LIVE_SEARCH' => true,
-    'ENABLE_LABEL' => true
-]);
+?>
 
+<?php
 $APPLICATION->IncludeComponent(
     'bitrix:main.ui.grid',
     '',
@@ -44,6 +43,11 @@ $APPLICATION->IncludeComponent(
         'AJAX_OPTION_STYLE' => 'N',
         'AJAX_OPTION_HISTORY' => 'N',
         'AJAX_LOADER' => $arParams['AJAX_LOADER'],
+        'AJAX_ID' => \CAjax::getComponentID(
+            'bitrix:main.ui.grid',
+            '.default',
+            ''
+        ),
         'ALLOW_COLUMNS_SORT' => true,
         'ALLOW_ROWS_SORT' => [],
         'ALLOW_COLUMNS_RESIZE' => true,
@@ -51,6 +55,7 @@ $APPLICATION->IncludeComponent(
         'ALLOW_SORT' => true,
         'ALLOW_PIN_HEADER' => true,
         'ACTION_PANEL' => [],
+
         'SHOW_CHECK_ALL_CHECKBOXES' => false,
         'SHOW_ROW_CHECKBOXES' => false,
         'SHOW_ROW_ACTIONS_MENU' => true,
@@ -61,8 +66,10 @@ $APPLICATION->IncludeComponent(
         'SHOW_TOTAL_COUNTER' => true,
         'SHOW_PAGESIZE' => true,
         'SHOW_ACTION_PANEL' => true,
+
         'ENABLE_COLLAPSIBLE_ROWS' => true,
         'ALLOW_SAVE_ROWS_STATE' => true,
+
         'SHOW_MORE_BUTTON' => false,
         'CURRENT_PAGE' => '',
         'DEFAULT_PAGE_SIZE' => 20,
@@ -92,8 +99,3 @@ if (!empty($arParams['AJAX_LOADER'])) { ?>
         });
     </script>
 <?php } ?>
-<script>
-    BX.Otus.BookGrid.init(<?=Json::encode([
-        'signedParams' => $this->__component->getSignedParameters(),
-    ])?>);
-</script>
