@@ -66,7 +66,7 @@ class aholin_crmcustomtab extends CModule
         $this->UnInstallDB();
         $this->UnInstallEvents();
 
-        \Bitrix\Main\ModuleManager::unRegisterModule($this->MODULE_ID);
+        ModuleManager::unRegisterModule($this->MODULE_ID);
     }
 
     /**
@@ -83,6 +83,9 @@ class aholin_crmcustomtab extends CModule
         }
     }
 
+    /**
+     * @throws LoaderException
+     */
     public function InstallDB(): void
     {
         Loader::includeModule($this->MODULE_ID);
@@ -94,6 +97,7 @@ class aholin_crmcustomtab extends CModule
                 Base::getInstance($entity)->createDbTable();
             }
         }
+
         $this->installManyToManyTable();
 
         foreach ($entities as $entity) {
@@ -135,7 +139,7 @@ class aholin_crmcustomtab extends CModule
     {
         Loader::includeModule($this->MODULE_ID);
 
-        $connection = \Bitrix\Main\Application::getConnection();
+        $connection = Application::getConnection();
 
         $entities = $this->getEntities();
         $this->unInstallManyToManyTable();
@@ -189,9 +193,7 @@ class aholin_crmcustomtab extends CModule
             CREATE TABLE {$tableName} (
                 BOOK_ID int NOT NULL,
                 AUTHOR_ID int NOT NULL,
-                PRIMARY KEY (BOOK_ID, AUTHOR_ID),
-                CONSTRAINT fk_{$tableName}_book FOREIGN KEY (BOOK_ID) REFERENCES aholin_book(ID) ON DELETE CASCADE,
-                CONSTRAINT fk_{$tableName}_author FOREIGN KEY (AUTHOR_ID) REFERENCES aholin_author(ID) ON DELETE CASCADE
+                PRIMARY KEY (BOOK_ID, AUTHOR_ID)
             )
         ");
         }
@@ -227,8 +229,8 @@ class aholin_crmcustomtab extends CModule
         }
     }
 
-    public function isVersionD7()
+    public function isVersionD7(): bool
     {
-        return CheckVersion(ModuleManager::getVersion('main'), '20.00.00');
+        return version_compare(ModuleManager::getVersion('main'), '20.00.00', ">");
     }
 }
