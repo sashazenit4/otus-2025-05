@@ -4,6 +4,7 @@ use Bitrix\Main\Web\Json;
 use Bitrix\Main\Localization\Loc;
 use Bitrix\UI\Toolbar\Facade\Toolbar;
 use Bitrix\Main\Loader;
+use Bitrix\Main\UI\Extension;
 
 if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true)
     die();
@@ -16,6 +17,7 @@ if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true)
  */
 
 Loader::includeModule('ui');
+Extension::load(['otus.modal.dialog']);
 foreach ($arResult['BUTTONS'] as $button) {
     Toolbar::addButton($button);
 }
@@ -93,6 +95,18 @@ if (!empty($arParams['AJAX_LOADER'])) { ?>
     </script>
 <?php } ?>
 <script>
+    function showConfirmationBookPopup() {
+        BX.Otus.Modal.Dialog.init({
+            popupId: 'Book-confirmation-popup',
+            caption: 'Подтвердите оферту',
+            content: 'Подтвердите, что прочтёте все эти книги до конца лета!',
+            actionYes: 'close',
+            actionNo: 'close',
+        });
+        BX.Otus.Modal.Dialog.createPopup();
+        BX.Otus.Modal.Dialog.openPopup();
+    }
+
     BX.Otus.BookGrid.init(<?=Json::encode([
         'signedParams' => $this->__component->getSignedParameters(),
     ])?>);
