@@ -133,20 +133,25 @@ class BookGrid extends \CBitrixComponent implements Controllerable, Errorable
                 'text' => Loc::getMessage('EXPORT_XLSX_BUTTON_TITLE'),
                 'color' => Color::PRIMARY,
             ],
+//            [
+//                'onclick' => 'BX.Otus.BookGrid.addTestBookElement',
+//                'text' => Loc::getMessage('ADD_TEST_BOOK_BUTTON_TITLE'),
+//                'color' => Color::SUCCESS,
+//            ],
+//            [
+//                'onclick' => 'BX.Otus.BookGrid.createAlternativeTestBookElement',
+//                'text' => Loc::getMessage('ADD_TEST_BOOK_BUTTON_TITLE') . ' - альтернативное применение',
+//                'color' => Color::DANGER_LIGHT,
+//            ],
+//            [
+//                'onclick' => 'BX.Otus.BookGrid.createTestElementViaModule',
+//                'text' => Loc::getMessage('ADD_TEST_BOOK_BUTTON_TITLE') . ' - через модуль',
+//                'color' => Color::PRIMARY_DARK,
+//            ],
             [
-                'onclick' => 'BX.Otus.BookGrid.addTestBookElement',
-                'text' => Loc::getMessage('ADD_TEST_BOOK_BUTTON_TITLE'),
-                'color' => Color::SUCCESS,
-            ],
-            [
-                'onclick' => 'BX.Otus.BookGrid.createAlternativeTestBookElement',
-                'text' => Loc::getMessage('ADD_TEST_BOOK_BUTTON_TITLE') . ' - альтернативное применение',
-                'color' => Color::DANGER_LIGHT,
-            ],
-            [
-                'onclick' => 'BX.Otus.BookGrid.createTestElementViaModule',
-                'text' => Loc::getMessage('ADD_TEST_BOOK_BUTTON_TITLE') . ' - через модуль',
-                'color' => Color::PRIMARY_DARK,
+                'onclick' => 'showConfirmationBookPopup',
+                'text' => 'Подтвердите согласие на чтение книги',
+                'color' => Color::DANGER,
             ],
         ];
     }
