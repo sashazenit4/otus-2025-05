@@ -306,6 +306,7 @@ class BookGrid extends \CBitrixComponent implements Controllerable, Errorable
             }
         }
 
+        $i = 1;
         foreach ($groupedBooks as $book) {
             $gridList[] = [
                 'data' => [
@@ -317,9 +318,29 @@ class BookGrid extends \CBitrixComponent implements Controllerable, Errorable
                     'PUBLISH_DATE' => $book['PUBLISH_DATE']->format('d.m.Y'),
                     'DEAL' => $this->prepareDealLink($book['DEAL'], $book['DEAL_ID']),
                 ],
+                'id' => $i++,
                 'actions' => $this->getElementActions(),
+                'attrs' => [
+                    'is-section' => true,
+                ],
             ];
         }
+        $gridList[] = [
+            'data' => [
+                'ID' => '321',
+                'TITLE' => 'Думай и богатей',
+                'YEAR' => '1953',
+                'PAGES' => 123,
+                'AUTHORS' => 'Наполеон Хилл',
+                'PUBLISH_DATE' => (new \DateTime)->format('d.m.Y'),
+            ],
+            'id' => $i,
+            'actions' => $this->getElementActions(),
+            'attrs' => [
+                'is-section' => false,
+                'parent' => --$i,
+            ],
+        ];
 
         return $gridList;
     }

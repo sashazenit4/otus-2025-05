@@ -17,8 +17,15 @@ BX.Otus.Modal.Dialog = {
         this.actionNo = data.actionNo;
     },
     createPopup: function () {
+        let contentHtmlBlock = BX.create('div', {
+            props: {
+                className: 'otus-popup__content-default'
+            },
+            html: this.content,
+        });
+
         let content = null !== this.content ?
-            '<div class="otus-popup__content-default">' + this.content + '</div>' :
+            contentHtmlBlock.innerHTML :
             this.htmlContent;
 
         let actionYes, actionNo;

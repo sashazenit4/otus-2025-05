@@ -17,7 +17,7 @@ if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true)
  */
 
 Loader::includeModule('ui');
-Extension::load(['otus.modal.dialog', 'date']);
+Extension::load(['otus.modal.dialog', 'date', 'aclips.ui-grid-collapse']);
 foreach ($arResult['BUTTONS'] as $button) {
     Toolbar::addButton($button);
 }
@@ -116,8 +116,11 @@ $APPLICATION->IncludeComponent(
         'signedParams' => $this->__component->getSignedParameters(),
     ])?>);
     BX(() => {
-        alert(document.querySelector('.hidden-info').innerHTML);
-        alert(BX.date.format('d.m.Y h:i:s', <?=strtotime('24.09.2001')?>));
+            BX.Aclips.Plugin.UIGridCollapse.initCollapse('<?=$arResult['FILTER_ID']?>', {
+                'default-collapse': true,
+                'is-section-selector': '[is-section="true"]',
+                'parent-attribute': 'parent'
+            });
     });
 
 </script>
