@@ -17,4 +17,17 @@ class Iblock
             ],
         ])->fetch()['ID'];
     }
+
+    public static function getIblockCodeById(int $id): string
+    {
+        return IblockTable::getList([
+            'filter' => [
+                'ID' => $id,
+            ],
+            'limit' => 1,
+            'cache' => [
+                'ttl' => 360000,
+            ],
+        ])->fetch()['CODE'];
+    }
 }
