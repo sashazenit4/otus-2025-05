@@ -65,6 +65,8 @@ class BookTable extends DataManager
                 Join::on('this.PUBLISHER_ID', 'ref.ID')
             ))
                 ->configureJoinType('inner'),
+
+            (new IntegerField('DEAL_ID')),
         ];
     }
 }

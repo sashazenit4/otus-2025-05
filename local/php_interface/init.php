@@ -13,3 +13,6 @@ if (file_exists(__DIR__ . '/events.php')) {
     require_once __DIR__ . '/events.php';
 }
 
+\Bitrix\Main\UI\Extension::load([
+    'otus.slider.bindSlider'
+]);
