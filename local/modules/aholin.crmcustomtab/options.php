@@ -70,6 +70,23 @@ $aTabsStatic = [
             ],
         ]
     ],
+    [
+        'DIV' => 'tokens',
+        'TAB' => 'Токены внешних АПИ',
+        'ICON' => '',
+        'TITLE' => 'Токены внешних АПИ',
+        'OPTIONS' => [
+            [
+                'OPENWEATHER_TOKEN',
+                'Токен openweather',
+                '',
+                [
+                    'text',
+                    32,
+                ],
+            ],
+        ]
+    ],
 ];
 
 $aTabs = $aTabsStatic;

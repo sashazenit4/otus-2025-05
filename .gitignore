@@ -4,3 +4,4 @@
 /vendor/
 
 /local/modules/aholin.crmcustomtab/vendor/
+.env

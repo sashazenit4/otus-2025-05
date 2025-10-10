@@ -2,6 +2,10 @@
     "require": {
         "symfony/var-dumper": "^7.3",
         "phpoffice/phpspreadsheet": "^4.1",
-        "mpdf/mpdf": "^8.2"
+        "mpdf/mpdf": "^8.2",
+        "guzzlehttp/guzzle": "^7.10",
+      "ext-json": "*",
+      "ext-curl": "*",
+        "vlucas/phpdotenv": "^5.6"
     }
 }
